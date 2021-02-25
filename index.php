@@ -337,7 +337,8 @@ canvas {
         // Create our data table out of JSON data loaded from server.
         var data = new google.visualization.DataTable(jsonData);
          var ECGoptions = {
-         title:'Latest ECG Reads',
+         title:'Latest Meter Reads',
+         curveType: 'function',
          lineWidth:1,
          legend:{position:'bottom'},
          chartArea:{width:'80%'},
@@ -348,7 +349,7 @@ canvas {
             gridlines: {count: 12},title:"Time"
           },
           vAxis: {
-            gridlines: {count: 12},title:"ECG"
+            gridlines: {count: 12},title:"Kwh"
           }
          };        // Instantiate and draw our chart, passing in some options.
         var chart = new google.visualization.LineChart(document.getElementById('ecg'));
