@@ -4,7 +4,7 @@ error_reporting(0);
 session_start();
 $username = $_REQUEST['username'];
 $password = $_REQUEST['password'];
-
+try {
 if(empty($username) || empty($password)){
   $msg = "All fields required";
 }else{
@@ -21,6 +21,9 @@ if(empty($username) || empty($password)){
     $_SESSION['role']=$result[0]['role'];
     $_SESSION['user_details']=$result[0];
   }
+}
+}catch(PDOException $ex){
+    $msg=["error"=>$ex];
 }
 echo json_encode(['msg'=>$msg,"data"=>$_POST,!password_verify($password,$result[0]['password'])]);
 ?>
