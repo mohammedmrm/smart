@@ -271,7 +271,7 @@ canvas {
     </div>-->
     <hr />
     <div class="row">
-        <div class="col-sm-6"><h1>Meter Reads Track</h1>
+        <div class="col-sm-12"><h1>Meter Reads Track</h1>
             <div id="ecg"></div>
         </div>
     </div>

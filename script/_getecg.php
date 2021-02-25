@@ -14,7 +14,7 @@ $table['cols'] = [
   'label' => 'Date Time',
   'type' => 'string'
  ],[
-  'label' => 'ECG',
+  'label' => 'Kwh',
   'type' => 'number'
  ],[
   'label' => 'Average',
