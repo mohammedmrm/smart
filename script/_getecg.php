@@ -27,7 +27,7 @@ $avgres = getData($con,$sql,[$device]);
 $avg = $avgres[0]['avg'];
 foreach($result as $k=>$val){
      $sub_array[] =  array(
-      "v" => date("H:s",strtotime($val['date'])),
+      "v" => date("m-d H:s",strtotime($val['date'])),
      );
      $sub_array[] =  array(
       "v" => $val['kwh'],
