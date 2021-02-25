@@ -251,7 +251,7 @@ canvas {
             <label class="h5" id="meter_no">Meter No : </label>
         </div>
         <div class="col-sm-3">
-            <label class="h5" id="name">Avalible fees: </label>
+            <label class="h5" id="name">Name: </label>
         </div>
         <div class="col-sm-12"><hr /></div>
     </div>
