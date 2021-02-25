@@ -27,7 +27,7 @@
   }
 
   #ecg{
-    height: 350px;
+    height: 400px;
   }
   #emg{
     height: 300px;
