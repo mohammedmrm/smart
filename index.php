@@ -341,6 +341,7 @@ canvas {
         var data = new google.visualization.DataTable(jsonData);
          var ECGoptions = {
          title:'Latest Meter Reads',
+         pointSize: 3,
          curveType: 'function',
          lineWidth:1,
          legend:{position:'bottom'},
