@@ -479,6 +479,7 @@ canvas {
         }
 
       }, 1000);
+      changeReads();
       function randomreads(){ ///------testing function adds random reads
         $.ajax({
           url:"script/randomreads.php",
@@ -490,7 +491,7 @@ canvas {
           }
         });
       }
-      function getPatientInfo(){
+      function getMeterInfo(){
         $.ajax({
           url:"script/_getMeterInfo.php",
           data:{id:$("#devices").val()},

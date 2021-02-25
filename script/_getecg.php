@@ -2,8 +2,8 @@
 header('Content-type:application/json');
 session_start();
 require_once("dbconnection.php");
-$device = $_REQUEST["dev"];
-$sql = "select * from (select * from  ecg where dev_id=? order by date DESC limit 150) sub  order by id ASC";
+$device = "1000000000";
+$sql = "select * from  reading where meter_no=? order by date DESC limit 150";
 $result = getData($con,$sql,[$device]);
 
 $data = [];
@@ -22,7 +22,7 @@ $table['cols'] = [
  ]
 
 ];
-$sql = "select * from (select avg(ecg) as avg from ecg where dev_id=? order by id DESC limit 150) sub";
+$sql = "select avg(kwh) as avg from reading where meter_no=? order by id DESC limit 150";
 $avgres = getData($con,$sql,[$device]);
 $avg = $avgres[0]['avg'];
 foreach($result as $k=>$val){
@@ -30,7 +30,7 @@ foreach($result as $k=>$val){
       "v" => date("H:s",strtotime($val['date'])),
      );
      $sub_array[] =  array(
-      "v" => $val['ecg'],
+      "v" => $val['kwh'],
       );
      $sub_array[] =  array(
       "v" => $avg,
