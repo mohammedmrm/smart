@@ -27,7 +27,7 @@
   }
 
   #ecg{
-    height: 300px;
+    height: 350px;
   }
   #emg{
     height: 300px;
@@ -285,26 +285,7 @@ canvas {
 
       google.charts.load('current', {'packages':['gauge']});
       google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(temperature);
       google.charts.setOnLoadCallback(meter);
-
-      var gaugeOptions = {
-           height: 250,yellowColor:'#FF3333',redColor:"#FF3333",
-          redFrom: 37, redTo: 50,
-          yellowFrom:0, yellowTo: 34,
-          greenFrom:34,greenTo:37,
-          minorTicks: 10 , max :50,min:20
-        };
-      function temperature() {
-      gaugeData = new google.visualization.DataTable();
-      gaugeData.addColumn('number', 'Temperture');
-      gaugeData.addRows(1);
-      gaugeData.setCell(0, 0,0);
-
-      gauge = new google.visualization.Gauge(document.getElementById('temperature'));
-      gauge.draw(gaugeData, gaugeOptions);
-
-      }
       var gaugeOptions2 = {
           height: 250,redColor:"#FF3333",
           redFrom: 50, redTo: 100,
@@ -322,52 +303,18 @@ canvas {
       gauge2.draw(gaugeData2, gaugeOptions2);
 
       }
-      var gaugeOptions3 = {
-          height: 250,yellowColor:'#FF3333',redColor:"#FF3333",
-          redFrom: 110, redTo: 200,
-          yellowFrom:0, yellowTo: 50,
-          greenFrom:50,greenTo:110,
-          minorTicks: 20 , max :200
-        };
-      function beat() {
-      gaugeData3 = new google.visualization.DataTable();
-      gaugeData3.addColumn('number', 'Heart Beat');
-      gaugeData3.addRows(1);
-      gaugeData3.setCell(0, 0,0);
 
-      gauge3 = new google.visualization.Gauge(document.getElementById('beat'));
-      gauge3.draw(gaugeData3, gaugeOptions3);
-
-      }
 
       function changeReads(d) {
         getMeterInfo();
         $.ajax({
           url:"script/_getCurrentReads.php",
-          data:{dev:d},
+          data:{dev:"1000000000"},
           success:function(res){
            //console.log(res);
            $.each(res.data,function(){
-            gaugeData.setValue(0, 0, this.temp);
-            gauge.draw(gaugeData, gaugeOptions);
-            if(this.temp >= 37 || this.temp < 32){
-              $("#templed").css('background-color','#FF0033');
-              $("#templed").css('box-shadow','0px 0px 20px #FF0000');
-            }else{
-              $("#templed").css('background-color','#00CC00');
-              $("#templed").css('box-shadow','0px 0px 20px #00CC00');
-            }
-            gaugeData2.setValue(0, 0, this.meter);
+            gaugeData2.setValue(0, 0, this.kwh);
             gauge2.draw(gaugeData2, gaugeOptions2);
-            gaugeData3.setValue(0, 0, this.beat);
-            gauge3.draw(gaugeData3, gaugeOptions3);
-            if(this.beat > 110 || this.beat < 60 ){
-              $("#beatled").css('background-color','#FF0033');
-              $("#beatled").css('box-shadow','0px 0px 20px #FF0000');
-            }else{
-              $("#beatled").css('background-color','#00CC00');
-              $("#beatled").css('box-shadow','0px 0px 20px #00CC00');
-            }
            });
           },
           error:function(e){
@@ -407,36 +354,6 @@ canvas {
         var chart = new google.visualization.LineChart(document.getElementById('ecg'));
         chart.draw(data,ECGoptions);
       }
-      google.charts.setOnLoadCallback(lineemg);
-      function lineemg(d) {
-        var jsonData = $.ajax({
-            url: "script/_getemg.php",
-            dataType: "json",
-            data:{dev:d},
-            async: false,
-            success:function(res){ },
-            error:function(res){ }
-            }).responseText;
-        // Create our data table out of JSON data loaded from server.
-        var data = new google.visualization.DataTable(jsonData);
-         var EMGoptions = {
-         title:'Latest EMG Reads',
-         lineWidth:1,
-         legend:{position:'bottom'},
-         chartArea:{width:'80%'},
-          hAxis: {
-            title:"Time",
-          },
-          vAxis: {
-            minValue: 0,
-            gridlines: {count: 10},title:"EMG"
-          }
-         };
-
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.LineChart(document.getElementById('emg'));
-        chart.draw(data,EMGoptions);
-      }
       function getDevices(){
         $.ajax({
           url:"script/_getDevicesPatient.php",
@@ -445,17 +362,15 @@ canvas {
             
            $.each(res.data,function(){
              $("#devices").append(
-             '<option value="'+this.id+'">'+this.patient_name+'</option>'
+             '<option value="'+this.meter_no+'">'+this.meter_no+'-'+this.name+'</option>'
              );
            });
            if($("#userperiv").val() == 2){
              $("#devices").val($("#d_id").val());
              $("#devices").addClass('disabled');
              $("#devices").attr('disabled','disabled');
-             setstatuses($("#devices").val());
              changeReads($("#devices").val());
              lineecg($("#devices").val());
-             lineemg($("#devices").val());
            }
           },
           error:function(e){
@@ -466,14 +381,12 @@ canvas {
       getDevices();
       $("#devices").change(function(){
         changeReads($("#devices").val());
-        lineemg($("#devices").val());
-        lineemg($("#devices").val());
-       });
+        lineecg($("#devices").val());
+        });
       setInterval(function() {
         //randomreads();
         changeReads($("#devices").val());
         lineecg($("#devices").val());
-        lineemg($("#devices").val());
         if($('input#active').is(':checked')){
          randomreads();
         }
@@ -484,10 +397,10 @@ canvas {
         $.ajax({
           url:"script/randomreads.php",
           success:function(res){
-
+            console.log("rand",res)
           },
           error:function(e){
-           console.log(e);
+            console.log("rand",e)
           }
         });
       }
