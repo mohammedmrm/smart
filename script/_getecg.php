@@ -1,11 +1,11 @@
 <?php
 header('Content-type:application/json');
 session_start();
+error_reporting(0);
 require_once("dbconnection.php");
-$device = "1000000000";
-$sql = "select * from  reading where meter_no=? order by date DESC limit 150";
+$device = $_REQUEST['id'];
+$sql = "select * from (select * from  reading where meter_no=? order by date DESC limit 150) sub  order by id ASC";
 $result = getData($con,$sql,[$device]);
-
 $data = [];
 $sub_array = [];
 $rows = [];

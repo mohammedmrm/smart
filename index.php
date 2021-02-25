@@ -228,7 +228,7 @@ canvas {
    <div class="col-md-12 dev">
      <div class="form-group">
        <label class="col-sm-4"> Meters </label>
-       <select class="form-control selectpicker" onchange="changeReads($(this).val());getPatientInfo();" data-live-search="true" id="devices">
+       <select class="form-control selectpicker" onchange="changeReads($(this).val());getMeterInfo();" data-live-search="true" id="devices">
           <option>-- select Meter --</option>
        </select>
        <input type="checkbox" id="active" value="Active Random Reads"/> Active Random Reads
@@ -248,7 +248,7 @@ canvas {
   <div class="col-md-9">
     <div class="row">
         <div class="col-sm-3">
-            <label class="h5" id="room">Meter No : </label>
+            <label class="h5" id="meter_no">Meter No : </label>
         </div>
         <div class="col-sm-3">
             <label class="h5" id="name">Avalible fees: </label>
@@ -256,7 +256,8 @@ canvas {
         <div class="col-sm-12"><hr /></div>
     </div>
     <div class="row">
-        <div class="col-sm-4"><h3>Last Merter Read</h3>
+        <div class="col-sm-4"></div>
+        <div class="col-sm-6"><h3>Last Merter Read</h3>
           <div id="meter"></div>
         </div>
     </div>
@@ -270,12 +271,13 @@ canvas {
         </div>
     </div>-->
     <hr />
-    <div class="row">
-        <div class="col-sm-12"><h1>Meter Reads Track</h1>
-            <div id="ecg"></div>
-        </div>
-    </div>
+
   </div>
+  </div>
+  <div class="row">
+      <div class="col-sm-12"><h1>Meter Reads Track</h1>
+          <div id="ecg"></div>
+      </div>
   </div>
 </div>
 <?php include("footer.php"); ?>
@@ -293,6 +295,7 @@ canvas {
           greenFrom:0,greenTo:15,
           minorTicks: 5 , max :100
         };
+      var gaugeData2;
       function meter() {
       gaugeData2 = new google.visualization.DataTable();
       gaugeData2.addColumn('number', 'Kwh');
@@ -309,7 +312,7 @@ canvas {
         getMeterInfo();
         $.ajax({
           url:"script/_getCurrentReads.php",
-          data:{dev:"1000000000"},
+          data:{id:d},
           success:function(res){
            //console.log(res);
            $.each(res.data,function(){
@@ -328,7 +331,7 @@ canvas {
         var jsonData = $.ajax({
             url: "script/_getecg.php",
             dataType: "json",
-            data:{dev:d},
+            data:{id:d},
             async: false,
             success:function(res){},
             error:function(res){}
@@ -392,7 +395,7 @@ canvas {
          randomreads();
         }
 
-      }, 1000);
+      }, 5000);
       changeReads();
       function randomreads(){ ///------testing function adds random reads
         $.ajax({
@@ -410,14 +413,9 @@ canvas {
           url:"script/_getMeterInfo.php",
           data:{id:$("#devices").val()},
           success:function(res){
-            //console.log(res);
+            console.log(res);
             $.each(res.data,function(){
-               if(this.gender == 1){
-                   gender = "Male";
-               }else{
-                  gender = "Female";
-               }
-               $("#room").text('Room: '+this.id);
+               $("#meter_no").text('Meter NO: '+this.meter_no);
                $("#name").text('Name: '+this.name);
             });
           },
